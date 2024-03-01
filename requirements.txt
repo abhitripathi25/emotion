@@ -1,0 +1,16 @@
+Flask
+gunicorn
+itsdangerous
+Jinja2
+Werkzeug
+scipy
+scikit-learn
+joblib
+Flask-WTF
+pandas
+tensorflow                
+tensorflow-cpu           
+tensorflow-intel          
+torch  
+torchvision
+opencv-python 
