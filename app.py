@@ -88,11 +88,14 @@ def upload_file():
     
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        zip_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        upload_folder = os.path.join(os.getcwd(), 'uploads')  # Create a folder named 'uploads' in the current directory
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+        zip_path = os.path.join(upload_folder, filename)
         file.save(zip_path)
         
         # Create a temporary directory for unzipping
-        temp_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'temp')
+        temp_dir = os.path.join(upload_folder, 'temp')
         if not os.path.exists(temp_dir):
             os.makedirs(temp_dir)
         
@@ -118,7 +121,7 @@ def upload_file():
                         predict_and_annotate(file_path, result_folder, count_dict)
         
         # Create a zip file containing the annotated images
-        annotated_zip_path = os.path.join(app.config['UPLOAD_FOLDER'], 'annotated.zip')
+        annotated_zip_path = os.path.join(upload_folder, 'annotated.zip')
         with zipfile.ZipFile(annotated_zip_path, 'w') as zipf:
             for root, dirs, files in os.walk(result_folder):
                 for file in files:
@@ -137,7 +140,4 @@ def download_file(filename):
     return send_file(filename, as_attachment=True)
 
 if __name__ == '__main__':
-    app.config['UPLOAD_FOLDER'] = 'uploads'
-    if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        os.makedirs(app.config['UPLOAD_FOLDER'])
-    app.run(debug=True)
+    app.run(debug=True)  # Listen on all interfaces and port 8080
