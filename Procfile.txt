@@ -1,2 +1,26 @@
-web : gunicorn app:app --timeout 2280
+#!/bin/bash
 
+# Download Python source code
+wget https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz
+
+# Extract the source code
+tar -xf Python-3.12.2.tgz
+
+# Change into the extracted directory
+cd Python-3.12.2
+
+# Configure Python installation with optimizations and specify installation prefix
+./configure --enable-optimizations --prefix=$HOME/python3.12.2
+
+# Compile Python using multiple CPU cores
+make -j 4
+
+# Install Python into the specified prefix directory
+make install
+
+# Add the Python installation directory to PATH
+echo 'export PATH="$HOME/python3.12.2/bin:$PATH"' >> ~/.profile
+source ~/.profile
+
+# Verify Python installation
+python3.12 --version
